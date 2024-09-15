@@ -1,37 +1,45 @@
-const TaskPrototype = {
-    completeTask(){
-        this.status = "Завдання виконано!";
-        console.log(`Задача з ID: ${this.id} виконана`);
-    },
-    PrintTaskDetails(){
-        console.log(`Заголовок: ${this.title}`);
-        console.log(`Опис: ${this.description}`);
-        console.log(`Статус: ${this.status}`);
-        console.log(`Дедлайн: ${this.dedline}`);
-        console.log(`---------------------------------`);
-    }
+function Task(id, title, description, status, dedline) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.status = status;
+    this.dedline = new Date(dedline);
+}
+
+Task.prototype.completeTask = function() {
+    this.status = 'Виконано';
+    console.log(`Завдання: ${this.title} з ID: ${this.id} виконано`);
 };
 
-const task1 = Object.create(TaskPrototype);
-task1.id = 1;
-task1.title = 'Виконати ДЗ';
-task1.description = 'Виконати тест та 4 завданян в уроці 19';
-task1.status = 'Невиконано';
-task1.dedline = new Date('2024-09-15');
+function ListTask(id, listName, listDescription) {
+    this.id = id;
+    this.listName = listName;
+    this.listDescription = listDescription;
+    this.tasks = []; 
+}
 
-const task2 = Object.create(TaskPrototype);
-task2.id = 2;
-task2.title = 'Придбати меблі';
-task2.description = 'Купити компютерний стіл та диван';
-task2.status = 'Невиконано';
-task2.dedline = new Date('2024-09-15');
+ListTask.prototype.addTask = function(task) {
+    this.tasks.push(task); 
+    console.log(`Задача "${task.title}" додана до списку "${this.listName}"`);
+};
 
-task1.PrintTaskDetails();
-task2.PrintTaskDetails();
+ListTask.prototype.printTasks = function() {
+    console.log(`Список задач: "${this.listName}"`);
+    this.tasks.forEach(task => {
+        console.log(`ID: ${task.id}, Назва: ${task.title}, Опис: ${task.description}, Статус: ${task.status}, Дедлайн: ${task.dedline.toLocaleDateString('uk-UA')}`);
+    });
+};
+
+const task1 = new Task(1, 'Сходити за продуктами', 'Купити хліба та ковбаси', 'Невиконано', '2024-09-15');
+const task2 = new Task(2, 'Зробити вечерю', 'Запекти картоплю у духовці', 'Невиконано', '2024-09-15');
+
+const myListTask = new ListTask(2, 'Завдання для вихідного дня', 'Список завдань для вихідного дня');
+
+myListTask.addTask(task1);  
+myListTask.addTask(task2);  
+
+myListTask.printTasks();
 
 task1.completeTask();
-task1.PrintTaskDetails();
 
-task2.completeTask();
-task2.PrintTaskDetails();
-
+myListTask.printTasks();
